@@ -15,25 +15,27 @@
   <ul id="entriesList"></ul>
 
 <script>
-  // Your Supabase project URL - REPLACE this with your actual URL
+  // REPLACE these two with your actual project URL and anon key
   const supabaseUrl = 'https://fwgoqhybbdtciqctrdkc.supabase.co';
-
-  // Your anon/public API key (from your message)
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ3Z29xaHliYmR0Y2lxY3RyZGtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE4ODU5OTIsImV4cCI6MjA2NzQ2MTk5Mn0.iTuz6ZuhcHmVwUs_RM1S9l39xHJnsyGPlub6GVdKV2Q';
 
   const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
   async function loadEntries() {
+    // NOTE: Table name is 'Entries' with capital E
     let { data, error } = await supabase
-      .from('Entries')  // <-- Capital E here
+      .from('Entries')
       .select('*')
       .order('created_at', { ascending: false });
+
     if (error) {
       alert('Error loading entries: ' + error.message);
       return;
     }
+
     const list = document.getElementById('entriesList');
     list.innerHTML = '';
+
     data.forEach(entry => {
       const li = document.createElement('li');
       li.textContent = `${new Date(entry.created_at).toLocaleString()}: ${entry.content}`;
@@ -47,18 +49,21 @@
       alert('Please write something before adding.');
       return;
     }
-    const { data, error } = await supabase
-      .from('Entries')  // <-- Capital E here too
+
+    let { data, error } = await supabase
+      .from('Entries')
       .insert([{ content }]);
+
     if (error) {
       alert('Error adding entry: ' + error.message);
       return;
     }
+
     document.getElementById('entryContent').value = '';
     loadEntries();
   }
 
-  // Load entries on page load
+  // Load entries when the page first loads
   loadEntries();
 </script>
 
