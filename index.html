@@ -25,7 +25,7 @@
 
   async function loadEntries() {
     let { data, error } = await supabase
-      .from('entries')
+      .from('Entries')  // <-- Capital E here
       .select('*')
       .order('created_at', { ascending: false });
     if (error) {
@@ -48,7 +48,7 @@
       return;
     }
     const { data, error } = await supabase
-      .from('entries')
+      .from('Entries')  // <-- Capital E here too
       .insert([{ content }]);
     if (error) {
       alert('Error adding entry: ' + error.message);
